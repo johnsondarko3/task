@@ -193,6 +193,8 @@ input:checked ~ .bubble::after {
 	display: block;
 	margin-right: 1rem;
 	cursor: pointer;
+	cursor: move;
+    user-select: none;
 }
 
 .todo-item .todo-content {
