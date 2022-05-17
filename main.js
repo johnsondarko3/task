@@ -107,7 +107,57 @@ function DisplayTodos () {
 
 			})
 		})
+		// The current dragging item
+let draggingEle;
 
+// The current position of mouse relative to the dragging element
+let x = 0;
+let y = 0;
+
+const mouseDownHandler = function (e) {
+    draggingEle = e.target;
+
+    // Calculate the mouse position
+    const rect = draggingEle.getBoundingClientRect();
+    x = e.pageX - rect.left;
+    y = e.pageY - rect.top;
+
+    // Attach the listeners to `document`
+    document.addEventListener('mousemove', mouseMoveHandler);
+    document.addEventListener('mouseup', mouseUpHandler);
+};
+
+const mouseMoveHandler = function (e) {
+    // Set position for dragging element
+    draggingEle.style.position = 'absolute';
+    draggingEle.style.top = `${e.pageY - y}px`;
+    draggingEle.style.left = `${e.pageX - x}px`;
+};
+
+		const mouseUpHandler = function () {
+    // Remove the position styles
+    draggingEle.style.removeProperty('top');
+    draggingEle.style.removeProperty('left');
+    draggingEle.style.removeProperty('position');
+
+    x = null;
+    y = null;
+    draggingEle = null;
+
+    // Remove the handlers of `mousemove` and `mouseup`
+    document.removeEventListener('mousemove', mouseMoveHandler);
+    document.removeEventListener('mouseup', mouseUpHandler);
+};
+		const list = document.getElementById('list');
+
+// Query all items
+[].slice.call(list.querySelectorAll('.draggable')).forEach(function (item) {
+    item.addEventListener('mousedown', mouseDownHandler);
+});
+		
+		
+		
+		
 		deleteButton.addEventListener('click', (e) => {
 			todos = todos.filter(t => t != todo);
 			localStorage.setItem('todos', JSON.stringify(todos));
